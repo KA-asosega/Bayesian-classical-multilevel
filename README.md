@@ -28,38 +28,68 @@ str(maladata)
 
 # Accounting for survey design
 library(survey)
+
 library(haven)
+
 library(dplyr)
+
 mysurvey<- svydesign(id=maladata$Cluster.Number, data = maladata, strata = maladata$strata, weights = maladata$weight, nest = T)
+
                      options(survey.lonely.psu = "adjust")
+                     
 svytable(~ Malaria, mysurvey)
+
 malaria_P= prop.table(svytable(~ Malaria, mysurvey))
+
 binom.test(859,2895, conf.level = 0.95)
+
 round(malaria_P,2)
+
 table(maladata$Malaria)
+
 prop.table(table(maladata$Malaria))
+
 #crosstabulation of malaria with residence type
+
 svyby(~Malaria, by= ~Child_Sex, design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 #malaria and age group
 str(mysurvey)
 svyby(~Malaria, by= ~ Age_Group, design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Ethnicity, design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Type_Residence , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Wealth_StatusNew , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Child_Sex  , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Child_Slept_net  , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Anaemia_Stat  , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ Edu_Stat  , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 svyby(~Malaria, by= ~ M_net    , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
+
 #Chisquare test of association
 svychisq(~Malaria +Age_Group, mysurvey)
+
 svychisq(~Malaria +Ethnicity, mysurvey)
+
 svychisq(~Malaria + Type_Residence, mysurvey)
+
 svychisq(~Malaria + Wealth_StatusNew, mysurvey)
+
 svychisq(~Malaria + Child_Sex, mysurvey)
+
 svychisq(~Malaria + Child_Slept_net, mysurvey)
+
 svychisq(~Malaria + Anaemia_Stat, mysurvey)
+
 svychisq(~Malaria + Edu_Stat, mysurvey)
+
 svychisq(~Malaria + M_net, mysurvey)
 
 
