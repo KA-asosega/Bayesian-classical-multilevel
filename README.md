@@ -49,12 +49,10 @@ table(maladata$Malaria)
 
 prop.table(table(maladata$Malaria))
 
-#crosstabulation of malaria with residence type
+# crosstabulations of malaria with Factors
 
 svyby(~Malaria, by= ~Child_Sex, design = mysurvey, FUN = svymean, vartype = c("se","ci"))
 
-#malaria and age group
-str(mysurvey)
 svyby(~Malaria, by= ~ Age_Group, design = mysurvey, FUN = svymean, vartype = c("se","ci"))
 
 svyby(~Malaria, by= ~ Ethnicity, design = mysurvey, FUN = svymean, vartype = c("se","ci"))
@@ -73,7 +71,8 @@ svyby(~Malaria, by= ~ Edu_Stat  , design = mysurvey, FUN = svymean, vartype = c(
 
 svyby(~Malaria, by= ~ M_net    , design = mysurvey, FUN = svymean, vartype = c("se","ci"))
 
-#Chisquare test of association
+# Chisquare test of association
+
 svychisq(~Malaria +Age_Group, mysurvey)
 
 svychisq(~Malaria +Ethnicity, mysurvey)
@@ -93,7 +92,7 @@ svychisq(~Malaria + Edu_Stat, mysurvey)
 svychisq(~Malaria + M_net, mysurvey)
 
 
-#Bayesian Multilevel Model
+# Bayesian Multilevel Model
 library(brms)
 
 library(tidybayes)
@@ -166,21 +165,21 @@ library(shinystan)
 launch_shinystan(final_model)
 
 
-#Classical Method
+# Classical Method
 m1<- glmer(Malaria~ 1 +(1|cluster_NO.),data = maladata, family = binomial )
 
 summary(m1)
 
 summ(m1)
 
-#Final Classical model
+# Final Classical model
 Cl_model<- glmer(Malaria~ 1+ Age_Group + Wealth_StatusNew +Anaemia_Stat  + Child_Slept_net +Ethnicity +BUILT_Population +  LS_Temperature + Log_rain +(1|cluster_NO.),data = maladata, family = binomial,nAGQ = 10, control = glmerControl(optimizer = "bobyqa") )
 
 summary(Cl_model)
 
 plot(Cl_model)
 
-#Cluster Level Covariates
+# Cluster Level Covariates
 maU5=read.csv("C: ….\\Cluster Covariates\\Cluster_level1.csv",header = TRUE)
 
 str(maU5)
@@ -199,7 +198,7 @@ cor(maU5)
 
 ggplot(cor(maU5))
 
-#Descriptive Statistics for Cluster level covariates
+# Descriptive Statistics for Cluster level covariates
 library(psych)
 
 describe(maU5)
