@@ -95,21 +95,37 @@ svychisq(~Malaria + M_net, mysurvey)
 
 #Bayesian Multilevel Model
 library(brms)
+
 library(tidybayes)
+
 library(tidyverse)
+
 library(devtools)
+
 library(ROCR)
+
 library(posterior)
+
 library(HDInterval)
+
 library(rstan)
+
 library(rstanarm)
+
 library(rstantools)
+
 library(ggplot2)
+
 library(dplyr)
+
 library(merTools)
+
 library(lme4)
+
 library(jtools)
+
 library(performance)
+
 # Bayesian Random Intercept Only Model
 m0 = brm(Malaria~ 1 +(1|cluster_NO.),data = maladata, family = bernoulli(link = "logit"))
 summary(m0)
@@ -118,51 +134,72 @@ loo(m0)
 model_performance(m0)
 
 # Final Bayesian Model
+
 prior1<- c(prior(normal(0,10), class= Intercept),
            prior(cauchy(0,5), class= sd), 
            prior(normal(0,5), class= b))
+           
 final_model<- brm( Malaria~ 1+ Age_Group + Wealth_StatusNew + Anaemia_Stat + Child_Slept_net +Ethnicity + BUILT_Population +  LS_Temperature + Log_rain +(1|Cluster.Number),data = maladata, family = bernoulli(link = "logit"), prior = prior1)
+
 summary(final_model)
+
 loo(final_model)
 
-prior_summary(final_model)
 # Assessing for multidisciplinary among predictors 
+
 check_collinearity(final_model)
 
 plot(final_model)
+
 # Posterior predictive plot
 pp_check(final_model, nsamples = 200 + theme(length.position= c(0.5, 0.5)))
 
 conditional_effects(final_model)
+
 # Trace and Density plots
+
 final_model %>%
   plot(combo=c("hist","trace"), width=c(1,1.5), theme=theme_bw(base_size = 10))
+  
 library(shinystan)
+
 launch_shinystan(final_model)
+
 
 #Classical Method
 m1<- glmer(Malaria~ 1 +(1|cluster_NO.),data = maladata, family = binomial )
+
 summary(m1)
+
 summ(m1)
+
 #Final Classical model
 Cl_model<- glmer(Malaria~ 1+ Age_Group + Wealth_StatusNew +Anaemia_Stat  + Child_Slept_net +Ethnicity +BUILT_Population +  LS_Temperature + Log_rain +(1|cluster_NO.),data = maladata, family = binomial,nAGQ = 10, control = glmerControl(optimizer = "bobyqa") )
-summary(Cl_model)
-plot(Cl_model)
 
+summary(Cl_model)
+
+plot(Cl_model)
 
 #Cluster Level Covariates
 maU5=read.csv("C: ….\\Cluster Covariates\\Cluster_level1.csv",header = TRUE)
+
 str(maU5)
 library(PerformanceAnalytics)
+
 library(ggcorrplot)
+
 ggcorrplot(cor(maU5),
            hc.order = TRUE,
            type = "lower",
            lab = TRUE)
+           
 chart.Correlation(maU5, histogram = TRUE, method = "pearson")
+
 cor(maU5)
+
 ggplot(cor(maU5))
 
 #Descriptive Statistics for Cluster level covariates
 library(psych)
+
 describe(maU5)
