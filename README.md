@@ -145,7 +145,7 @@ summary(final_model)
 
 loo(final_model)
 
-# Assessing for multidisciplinary among predictors 
+# Assessing for Collinearity among predictors 
 
 check_collinearity(final_model)
 
