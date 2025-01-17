@@ -2,17 +2,29 @@
 Malaria among U5 analysis code
 R -code for Data analysis
 maladata=read.csv("…….\\Malaria_Analysis1.csv", header = T)
+
 maladata$Age_Mother<-as.numeric(as.character.Date( maladata$Age_Mother))
+
 maladata$Type_Residence<-as.factor(maladata$Type_Residence)
+
 maladata$Wealth_StatusNew <- as.factor(maladata$Wealth_StatusNew)
+
 maladata$M_net <- as.factor(maladata$M_net)
+
 maladata$NHIS_coverage <-as.factor((maladata$NHIS_coverage))
+
 maladata$Child_Sex <- as.factor(maladata$Child_Sex)
+
 maladata$Child_Slept_net <- as.factor(maladata$Child_Slept_net)
+
 maladata$Anaemia_Stat  <- as.factor(maladata$Anaemia_Stat)
+
 maladata$Age_Group <- as.factor(maladata$Age_Group)
+
 maladata$Ethnicity<-as.factor(maladata$Ethnicity)
+
 str(maladata)
+
 
 # Accounting for survey design
 library(survey)
